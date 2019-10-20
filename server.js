@@ -20,14 +20,19 @@ app.engine("handlebars", exphbs({defaultLayout: "main"})
 
 app.set("view engine", "handlebars");
 
-mongoose.connect("mongodb://localhost/news_scraper_spacejnk");
+//mongoose.connect("mongodb://localhost/news_scraper_spacejnk");
+
+const MONGODB_URI =
+process.env.MONGODB_URI || "mongodb://localhost/news_scraper_spacejnk";
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 const db = mongoose.connection;
 
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function() {
     console.log("Connected to Mongoose!");
 });
-
+const routes = require("./controller/controller.js");
+app.use("/", routes);
 const port = process.env.PORT || 3001;
 app.listen(port, function() {
     console.log("Listening on PORT " + port)
