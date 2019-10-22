@@ -28,7 +28,7 @@ app.set("view engine", "handlebars");
 //connecting to MongoDB
 //mongoose.connect("mongodb://localhost/mongo-news-scraper-spacejnk");
 const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost/mongo-news-scraper-spacejnk";
+process.env.MONGODB_URI || "mongodb://localhost/mongo-news-scraper-spacejnk";
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 var db = mongoose.connection;
