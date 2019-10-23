@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
+const mongoose = require("mongoose");
 
 const request = require("request");
 const cheerio = require("cheerio");
@@ -91,7 +92,7 @@ router.get("/clearAll", function(req, res) {
 });
 
 router.get("/readArticle/:id", function(req, res) {
-  const articleId = req.params.id;
+  const articleId = new mongoose.Types.ObjectId(req.params.id);
   const hbsObj = {
     article: [],
     body: []
@@ -102,24 +103,9 @@ router.get("/readArticle/:id", function(req, res) {
     .exec(function(err, doc) {
       if (err) {
         console.log("Error: " + err);
+        res.sendStatus(500);
       } else {
-        hbsObj.article = doc;
-        const link = doc.link;
-        request(link, function(error, response, html) {
-          const $ = cheerio.load(html);
-
-          $(".title ").each(function(i, element) {
-            hbsObj.body = $(this)
-              
-               //.children("p")
-               .text()
-               .attr("href");
-              
-
-            res.render("article", hbsObj);
-            return false;
-          });
-        });
+        res.redirect(doc.link);
       }
     });
 });
